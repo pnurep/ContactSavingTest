@@ -11,15 +11,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
+import io.fabric.sdk.android.Fabric;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     EditText DisplayName, MobileNumber, HomeNumber, WorkNumber, emailID, company, jobTitle;
-    Button btnSave;
+    Button btnSave, btnCrash;
 
     String displayName = "";
     String mobileNumber = "";
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
         DisplayName = (EditText) findViewById(R.id.displayname);
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         jobTitle = (EditText) findViewById(R.id.jobTitle);
 
         btnSave = (Button) findViewById(R.id.btnSave);
+        btnCrash = (Button) findViewById(R.id.btn_force_crash);
 
         initContactOps();
         //saveContactInfo();
@@ -59,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
                 ContactsContract.RawContacts.CONTENT_URI)
                 .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
                 .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null).build());
+    }
+
+    public void forceCrash(View view) {
+        throw new RuntimeException("내가 바로 에러다!!!");
     }
 
     public void clicked(View v) {
